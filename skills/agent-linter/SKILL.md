@@ -1,6 +1,6 @@
 ---
 name: agent-linter
-description: Audits all the context an AI agent receives (AGENTS.md, CLAUDE.md, skills, referenced docs, MCP configs) and generates an executive report of contradictions, ambiguities, redundancies, and structural issues. Ranks findings by impact, calculates a context health score, and offers a detailed report on demand. It does not apply changes on its own: at the end it asks the user whether to apply them. The report is always generated in the user's language.
+description: "Audits all the context an AI agent receives (AGENTS.md, CLAUDE.md, skills, referenced docs, MCP configs) and generates an executive report of contradictions, ambiguities, redundancies, and structural issues. Ranks findings by impact, calculates a context health score, and offers a detailed report on demand. It does not apply changes on its own: at the end it asks the user whether to apply them. The report is always generated in the user's language."
 ---
 
 # Agent Linter
