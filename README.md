@@ -1,3 +1,7 @@
+<div align="center">
+    <img src="./logo.png" width="320" alt="skills">
+</div>
+
 # Skills
 
 A collection of skills for AI agents. Each skill is a self-contained set of instructions that extends an agent's capabilities without external dependencies.
