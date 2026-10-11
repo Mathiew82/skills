@@ -1,6 +1,6 @@
 ---
 name: agent-linter
-description: "Audits all the context an AI agent receives (AGENTS.md, CLAUDE.md, skills, referenced docs, MCP configs) and generates an executive report of contradictions, ambiguities, redundancies, and structural issues. Ranks findings by impact, calculates a context health score, and offers a detailed report on demand. It does not apply changes on its own: at the end it asks the user whether to apply them. The report is always generated in the user's language."
+description: "Audits all the context an AI agent receives (AGENTS.md, CLAUDE.md, skills, referenced docs, MCP configs) and generates an executive report of contradictions, ambiguities, redundancies, and structural issues. Ranks findings by impact, calculates a context health score, and offers a detailed or plain-language report on demand. It does not apply changes on its own: at the end it asks the user whether to apply them. The report is always generated in the user's language."
 ---
 
 # Agent Linter
@@ -22,7 +22,7 @@ Analyzes **all the context an AI agent reads before acting** and generates an **
 
 **Language rule**: detect the language the user is speaking and generate the entire report in that language. If the user speaks Spanish, output the report in Spanish. If they speak English, in English. And so on for any language.
 
-**Important**: this skill **does not modify any file**. It only generates a report. At the end it offers options, including generating a detailed report if the user asks for it.
+**Important**: this skill **does not modify any file**. It only generates a report. At the end it offers options, including generating a detailed or plain-language report if the user asks for it.
 
 ---
 
@@ -235,7 +235,7 @@ Use the `prompts/build-report.md` prompt to generate the final report.
 5. Top behavioral-risk findings (high conflicts that do not make the Top 3 by tokens).
 6. Compact table with the rest of the problems.
 7. Global metrics and heaviest files.
-8. Closing question with options (including "detail").
+8. Closing question with options (including "detail" and "plain").
 
 **Detail option**: at the end of the report, the user can ask for **"detail"** or **"detailed report"**. In that case, generate the full report with:
 
@@ -248,8 +248,43 @@ Use the `prompts/build-report.md` prompt to generate the final report.
 **Execution modes**:
 - **`--summary`** (default): executive report.
 - **`--detail`**: full report directly.
+- **`--plain`**: executive report in plain language, no technical jargon.
 
 If the user does not specify, assume `--summary`.
+
+### Plain language mode (`--plain`)
+
+When the user asks for `--plain`, "plain mode", "simple language", "no jargon", "explain like I'm not a developer", or anything equivalent, generate the report **in plain language**.
+
+The structure is the same as `--summary`, but the way each section is written changes:
+
+**1. Health score**
+Replace numeric jargon with a plain verdict. Instead of "3.0/10", write something like:
+
+> Your agent's context has **several problems that are making it less efficient**. Nothing is broken in a dangerous way, but there are 5 things you should fix.
+
+If the score is high (>8), write: *"Your agent's context is in good shape."* If it's low (<4), write: *"Your agent's context has significant problems that are probably making it behave inconsistently."*
+
+**2. Findings**
+Do not use file paths, line numbers, hashes, or the words "token", "SKILL.md", "MCP", "YAML", etc. Instead:
+- Refer to files as *"the main instructions file of your agent"*, *"one of your installed skills"*, *"the style conventions document"*.
+- Describe conflicts with a concrete everyday example. Example:
+  > Two of your skills are telling the agent to respond in different languages. One says Spanish, the other says English. When both are active, the agent doesn't know which one to follow.
+- When mentioning a redundancy, say *"you have the same rule written 3 times in different files"* instead of "3 duplicated rules across 3 files".
+
+**3. Metrics**
+Translate metrics into plain language:
+- Instead of "~1,250 tokens recoverable", write *"you can free up about 6% of the information your agent reads, which will make it slightly faster and cheaper"*.
+- Instead of "22,600 tokens total", write *"your agent currently reads a moderate amount of information — not too much, not too little"*.
+- Do not show the "heaviest files" table with token percentages. Replace with: *"One of your skills takes up almost half of your agent's attention. If you're not using it, removing it would be the biggest win."*
+
+**4. Priority actions**
+Keep them concrete and actionable, but avoid technical verbs like "edit line 142". Example:
+- ✅ "Create a short document that tells the agent which skill wins when two contradict each other."
+- ❌ "Create a CLAUDE.md file with the hierarchy listed in section 3.2."
+
+**5. Everything else**
+The closing options (apply all, detail, etc.) stay exactly the same. Technical names still appear in the commands (`/agent-linter`, `--detail`, etc.) because those are what the user types.
 
 **Report style rules**:
 - No long paragraphs. Use lists and tables.
@@ -273,4 +308,5 @@ What do you want to do?
 - **"apply one by one"** → I review each change with you.
 - **"no"** → leave everything as is.
 - **"detail"** or **"detailed report"** → I generate the full report with all explanations, examples, and justifications.
+- **"plain"** or **"simple language"** → I generate the executive report in plain language, no technical jargon.
 ```

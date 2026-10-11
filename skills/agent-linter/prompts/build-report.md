@@ -107,6 +107,7 @@ What do you want to do?
 - **"apply one by one"** → I review each change with you.
 - **"no"** → leave everything as is.
 - **"detail"** or **"detailed report"** → I generate the full report with all explanations, examples, and justifications.
+- **"plain"** or **"simple language"** → I generate the executive report in plain language, no technical jargon.
 
 ## If the user asks for "detail" or "detailed report"
 
@@ -118,6 +119,40 @@ Then generate the full version of the report with:
 4. Detailed justification for each recommendation.
 5. Concrete examples when they add value.
 6. Broken references and outdated rules explained one by one.
+
+## If the user asks for "--plain" or plain language
+
+Generate the report in **plain language**, with no technical jargon, following the rules below.
+
+**Who is this for?**
+Someone who uses an AI agent but is not a developer. They don't know what "tokens", "AGENTS.md", "MCP", or "SKILL.md" mean. They want to understand what's wrong and what to do, in their own words.
+
+**Rules:**
+
+1. **No technical terms.** Do not use: tokens, context window, hash, YAML, JSON, MCP, SKILL.md, AGENTS.md, CLAUDE.md, line number, file path, regex. If you need to refer to a file, describe it in plain words:
+   - "your agent's main instruction file"
+   - "one of your installed skills"
+   - "the document where your style rules live"
+
+2. **Explain each finding with a concrete everyday example.** Not "there's a conflict about language", but:
+   > "One of your skills tells the agent to always reply in Spanish. Another one tells it to always reply in English. When both are active, the agent can't follow both — it will pick one and ignore the other, and you won't know why it responded in the wrong language."
+
+3. **Translate metrics to plain meaning.** Instead of "1,250 tokens recoverable", write *"you can free up about 6% of what your agent has to read"*. Instead of percentages of the total, say things like *"one of your skills is taking up almost half of your agent's attention"*.
+
+4. **Keep priority actions concrete but non-technical.** Instead of "edit line 142 of SKILL.md", write *"decide which skill should win when two of them give different instructions, and write that decision down somewhere your agent will read it first"*.
+
+5. **Use short paragraphs and lists.** No tables with columns like "Severity" or "Impact". Use plain bullet points.
+
+6. **End with the same options as always.** The user can still ask for "detail" to get the technical version, or "apply all" to apply changes.
+
+**Example opening:**
+
+> Your agent is reading a set of instructions that contradict each other in a few places. It's not broken, but this is why it sometimes responds in ways you didn't expect.
+>
+> Here are the 3 most important things to fix:
+>
+> 1. **Two of your skills disagree about which language to use.** One says Spanish, one says English. When both are active, the agent picks one at random. → Decide which one you want and tell the agent that one wins.
+> 2. **...
 
 ## Strict formatting rules
 
