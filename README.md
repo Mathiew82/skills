@@ -32,6 +32,18 @@ Example:
 
 The skill will analyze your agent's context and generate a report. It will not modify any file unless you explicitly ask it to.
 
+### Report modes
+
+agent-linter generates an executive report by default. You can ask for other formats in plain language — no need to memorize commands.
+
+- **Detailed report**: ask for "detail" or "a detailed report". You'll get the full version with the original passages side by side, so you can decide which rule to keep.
+  Example: `run agent-linter and give me the detailed report`
+- **Plain language report**: ask for "plain language", "no jargon", or "explain like I'm not a developer". You'll get the same executive report but without technical terms.
+  Example: `run agent-linter but explain it in plain language`
+- **Apply changes**: after the report, you can reply with "apply all", "apply only [section]", or "apply one by one". The skill will never modify anything unless you ask it to.
+
+You don't need to know any specific commands. Just ask for what you want in your own words. The skill detects the intent, not the exact phrasing.
+
 ## Repository structure
 
     skills/
